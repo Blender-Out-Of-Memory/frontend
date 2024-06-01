@@ -1,4 +1,3 @@
-import React from "react";
 import InputField from "../common/InputField";
 import RadioStayLoggedIn from "../common/RadioStayLoggedIn";
 import googleLogo from "../../assets/googlelogo.svg";
