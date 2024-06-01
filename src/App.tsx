@@ -1,8 +1,17 @@
-function App() {
+import React from "react"
+import ReactDOM from "react-dom"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import RegistrationScreen from "./pages/RegistrationScreen"
+
+
+const App: React.FC = () => {
   return (
-      <div className="flex items-center justify-center min-h-screen bg-gray">
-          <h1 className="text-4x1 font-bold text-blue-600">BOOM SOLUTIONS :)</h1>
-      </div>
+    <Router>
+      <Routes>
+          <Route path="/register" element={<RegistrationScreen/>} />
+      </Routes>
+    </Router>
+      
   )
 }
 
