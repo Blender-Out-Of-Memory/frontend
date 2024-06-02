@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ChangeEvent} from 'react'
 
 type Props = {
     labelTitle : string
@@ -6,10 +6,11 @@ type Props = {
     name : string
     id : string
     type: string
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void
 
 }
 
-const InputField: React.FC<Props> = ({ labelTitle, placeholder, name, id, type}) => {
+const InputField: React.FC<Props> = ({ labelTitle, placeholder, name, id, type, onChange}) => {
     return(
         <div>
             <label 
@@ -20,6 +21,7 @@ const InputField: React.FC<Props> = ({ labelTitle, placeholder, name, id, type})
                 type={type} 
                 name={name} id={id} 
                 placeholder= {placeholder ?? ""} 
+                onChange={onChange}
                 className = "bg-gray-50 border border-gray-300 text-darktext rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5" >
             </input>
         </div>
