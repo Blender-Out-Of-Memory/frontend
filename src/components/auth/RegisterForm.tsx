@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
 import RadioStayLoggedIn from "../common/RadioStayLoggedIn";
-import googleLogo from "../../assets/googlelogo.svg";
+import googleLogo from "../../assets/googlelogo.png"
 
 const RegisterForm = () => {
   const [username, setUsername] = useState<string>("");
