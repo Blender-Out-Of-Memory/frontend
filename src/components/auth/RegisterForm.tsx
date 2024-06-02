@@ -1,8 +1,22 @@
+import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
 import RadioStayLoggedIn from "../common/RadioStayLoggedIn";
 import googleLogo from "../../assets/googlelogo.svg";
 
 const RegisterForm = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<String>("");
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (username !== "" && email !== "" && password !== "") {
+      // Registration API Call
+    } else {
+      alert("Please provide a valid input");
+    }
+  };
+
   return (
     <>
       <div className="bg-white w-128 min-w-64 h-auto flex flex-col justify-center items-center px-8 py-8 rounded-lg shadow">
@@ -15,6 +29,9 @@ const RegisterForm = () => {
               name="name"
               id="name"
               type="name"
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setUsername(e.target.value)
+              }
             ></InputField>
             <InputField
               labelTitle="E-Mail"
@@ -22,6 +39,9 @@ const RegisterForm = () => {
               name="email"
               id="email"
               type="email"
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
             ></InputField>
             <InputField
               labelTitle="Password"
@@ -29,14 +49,14 @@ const RegisterForm = () => {
               name="password"
               id="password"
               type="password"
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
             ></InputField>
             <div className="flex flex-row justify-between">
               <RadioStayLoggedIn />
               <div>
-                <a
-                  href="http://test.com"
-                  className="text-sm text-primary"
-                >
+                <a href="http://test.com" className="text-sm text-primary">
                   Forgot Password?
                 </a>
               </div>
@@ -55,7 +75,9 @@ const RegisterForm = () => {
             </div>
           </form>
           <div className="text-center pt-6">
-            <p>Already have an account? <a className="text-primary">Login</a></p>
+            <p>
+              Already have an account? <a className="text-primary">Login</a>
+            </p>
           </div>
         </div>
       </div>
