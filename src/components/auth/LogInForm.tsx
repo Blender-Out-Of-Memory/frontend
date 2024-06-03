@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
-import RadioStayLoggedIn from "../common/RadioStayLoggedIn";
+import CheckboxStayLoggedIn from "../common/CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png";
 
 const LogInForm = () => {
@@ -43,7 +43,7 @@ const LogInForm = () => {
               }
             ></InputField>
             <div className="flex flex-row justify-between">
-              <RadioStayLoggedIn />
+              <CheckboxStayLoggedIn />
               <div>
                 <a href="http://test.com" className="text-sm text-primary">
                   Forgot Password?

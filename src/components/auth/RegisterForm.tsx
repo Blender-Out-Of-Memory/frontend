@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
-import RadioStayLoggedIn from "../common/RadioStayLoggedIn";
+import CheckboxStayLoggedIn from "../common/CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png"
 
 const RegisterForm = () => {
@@ -19,9 +19,9 @@ const RegisterForm = () => {
 
   return (
     <>
-      <div className="bg-white w-128 min-w-64 h-auto flex flex-col justify-center items-center px-8 py-8 rounded-lg shadow">
+      <div className="bg-background-secondary w-128 min-w-64 h-auto flex flex-col justify-center items-center px-8 py-8 rounded-lg shadow">
         <div className="p-6 space-y-4 w-full">
-          <h1 className="text-3xl font-bold">Register</h1>
+          <h1 className="text-3xl font-bold text-text-normal">Register</h1>
           <form className="w-full space-y-4">
             <InputField
               labelTitle="Name"
@@ -32,6 +32,7 @@ const RegisterForm = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setUsername(e.target.value)
               }
+              customStyling={""}
             ></InputField>
             <InputField
               labelTitle="E-Mail"
@@ -42,6 +43,7 @@ const RegisterForm = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
+              customStyling={""}
             ></InputField>
             <InputField
               labelTitle="Password"
@@ -52,9 +54,10 @@ const RegisterForm = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setPassword(e.target.value)
               }
+              customStyling={""}
             ></InputField>
             <div className="flex flex-row justify-between">
-              <RadioStayLoggedIn />
+              <CheckboxStayLoggedIn />
               <div>
                 <a href="http://test.com" className="text-sm text-primary">
                   Forgot Password?
@@ -74,7 +77,7 @@ const RegisterForm = () => {
               </button>
             </div>
           </form>
-          <div className="text-center pt-6">
+          <div className="text-center pt-6 text-text-normal">
             <p>
               Already have an account? <a className="text-primary">Login</a>
             </p>
