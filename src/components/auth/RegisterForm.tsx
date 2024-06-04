@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
-import CheckboxStayLoggedIn from "../common/CheckboxStayLoggedIn.tsx";
+import CheckboxStayLoggedIn from "./CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png"
 
 const RegisterForm = () => {
@@ -67,7 +67,7 @@ const RegisterForm = () => {
             <div className="flex flex-row justify-between">
               <button
                 type="submit"
-                className="bg-primary text-white focus:ring-4 w-2/5 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4"
+                className="bg-primary text-text-wh focus:ring-4 w-2/5 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4"
               >
                 Register
               </button>
@@ -79,7 +79,7 @@ const RegisterForm = () => {
           </form>
           <div className="text-center pt-6 text-text-normal">
             <p>
-              Already have an account? <a className="text-primary">Login</a>
+              Already have an account? <a href="/login" className="text-primary">Login</a>
             </p>
           </div>
         </div>
