@@ -8,3 +8,8 @@ Hier noch Mal der gleiche Quatsch, wie fürs Backend
 3. ```npm run dev``` führt euch einen Testserver aus, hier nützlich zu wissen, Vite hat Hot reload, also wenn ihr Code saved, wird das direkt im Browser aktualisiert.
 
 Mehr gibt es nicht zu sagen, hier muss man irgendwann auch noch ne environment file reinpacken, um die Host URL vom Backend zu spezifizieren (ist so weit ich weiß common practice), aber können wir intern besprechen und fürs erste meinetwegen auch hardcoden.
+
+## Implementation Hinweise
+
+- alle benutzten colors aus tailwind.config.js nehmen (falls neue benötigt hier und in index.css hinzufügen) damit darkmode geht
+- damit bei dem "customStyling" Attribut für custom components das autocomplete geht, müsst ihr in die Settings und in der config vom tailwind Plugin unter "classAttributes", dann "customStyling" hinzufügen

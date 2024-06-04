@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base{
+    :root {
+        --color-primary: #FF7A00;
+        --color-secondary-navy: #003366;
+        --color-secondary-cream: #FFF3E0;
+        --color-secondary-teal: #007D7C;
+
+        --color-accent-charcoal: #36454F;
+        --color-accent-lightgrey: #D3D3D3;
+
+        --color-text-normal: #0A0A0A;
+        --color-text-white: white;
+
+        --color-bg-primary: #E5E7EB;
+        --color-bg-secondary: #FAFAFA;
+
+        --color-button-main: #404040;
+
+        --color-inputField-placeholder: #9CA3AF; /*gray*/
+        --color-inputField-border: #9CA3AF;
+
+        --color-success: #4CAF50;
+        --color-error: #F44336;
+        --color-warning: #FFEB3B;
+        --color-info: #2196F3;
+    }
+
+    :root[data-theme="dark"] {
+        --color-primary: #FF7A00 /**#EA580C maybe als dunklere farbe ig??**/; /* Keep the primary color consistent */
+        --color-secondary-navy: #4B89DC; /* Lighter navy for better contrast */
+        --color-secondary-cream: #3E3E3E; /* Dark cream color */
+        --color-secondary-teal: #1E7B7B; /* Darker teal */
+
+        --color-accent-charcoal: #A0A0A0; /* Lighter charcoal */
+        --color-accent-lightgrey: #4A4A4A; /* Darker grey */
+
+        --color-text-normal: #F5F5F5;
+        --color-text-white: #F5F5F5;
+
+        --color-bg-primary: #262626;
+        --color-bg-secondary: #333333;
+
+        --color-button-main: #505050;
+
+        --color-inputField-placeholder: #A1A1A1;
+        --color-inputField-border: #A1A1A1;
+
+        --color-darktext: #FFFFFF; /* Inverse text color */
+        --color-lighttext: #333333; /* Inverse text color */
+        --color-background-light: #282828; /* Dark background */
+        --color-background-dark: #1C1C1C; /* Darker background */
+
+        --color-success: #81C784; /* Lighter green */
+        --color-error: #E57373; /* Lighter red */
+        --color-warning: #FFD54F; /* Lighter yellow */
+        --color-info: #64B5F6; /* Lighter blue */
+    }
+}
