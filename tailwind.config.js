@@ -19,6 +19,7 @@ module.exports = {
 
         text: {
           normal: 'var(--color-text-normal)',
+          white: 'var(--color-text-white)', /*NOTE: use only when primary is used since thats the only color that does not change */
         },
 
         background: {
@@ -26,9 +27,13 @@ module.exports = {
           secondary: 'var(--color-bg-secondary)',
         },
 
+        button: {
+          main: 'var(--color-button-main)',
+        },
+
         inputField: {
           placeholder: 'var(--color-inputField-placeholder)',
-          border: 'var(--color  -inputField-border)',
+          border: 'var(--color-inputField-border)',
         },
 
         success: 'var(--color-success)',

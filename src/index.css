@@ -13,18 +13,15 @@
         --color-accent-lightgrey: #D3D3D3;
 
         --color-text-normal: #0A0A0A;
+        --color-text-white: white;
 
-        --color-bg-primary: #E5E7EB; /* oder gray*/
-        --color-bg-secondary: #FAFAFA; /* oder white*/
+        --color-bg-primary: #E5E7EB;
+        --color-bg-secondary: #FAFAFA;
 
-        --color-inputField-placeholder: #D1D5DB;
-        --color-inputField-border: #D1D5DB;
+        --color-button-main: #404040;
 
-        --color-darktext: #333333;
-        --color-lighttext: #FFFFFF;
-
-        /**--color-background-light: #FAFAFA;
-        --color-background-dark: #282828;**/
+        --color-inputField-placeholder: #9CA3AF; /*gray*/
+        --color-inputField-border: #9CA3AF;
 
         --color-success: #4CAF50;
         --color-error: #F44336;
@@ -42,9 +39,12 @@
         --color-accent-lightgrey: #4A4A4A; /* Darker grey */
 
         --color-text-normal: #F5F5F5;
+        --color-text-white: #F5F5F5;
 
         --color-bg-primary: #262626;
-        --color-bg-secondary: #404040;
+        --color-bg-secondary: #333333;
+
+        --color-button-main: #505050;
 
         --color-inputField-placeholder: #A1A1A1;
         --color-inputField-border: #A1A1A1;
