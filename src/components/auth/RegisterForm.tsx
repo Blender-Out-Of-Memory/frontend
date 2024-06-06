@@ -3,7 +3,7 @@ import InputField from "../common/InputField";
 import CheckboxStayLoggedIn from "./CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png"
 import {Link} from "react-router-dom";
-import {DarkmodeButton} from "../common/DarkmodeButton.tsx";
+import DarkmodeButton from "../common/DarkmodeButton.tsx";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState<string>("");
