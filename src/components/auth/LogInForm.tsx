@@ -2,6 +2,8 @@ import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
 import CheckboxStayLoggedIn from "./CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png";
+import {DarkmodeButton} from "../common/DarkmodeButton.tsx";
+import {Link} from "react-router-dom";
 
 const LogInForm = () => {
   const [username, setUsername] = useState<string>("");
@@ -20,6 +22,7 @@ const LogInForm = () => {
     <>
       <div className="bg-background-secondary w-128 min-w-64 h-auto flex flex-col justify-center items-center px-8 py-8 rounded-lg shadow">
         <div className="p-6 space-y-4 w-full">
+          <DarkmodeButton/>
           <h1 className="text-3xl font-bold text-text-normal">Log In</h1>
           <form className="w-full space-y-4">
             <InputField
@@ -66,7 +69,7 @@ const LogInForm = () => {
           </form>
           <div className="text-center pt-6 text-text-normal">
             <p>
-              Don't have an account? <a href="/register" className="text-primary">Register</a>
+              Don't have an account? <Link to="/register" className="text-primary">Register</Link>
             </p>
           </div>
         </div>

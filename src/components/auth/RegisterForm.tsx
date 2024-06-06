@@ -2,6 +2,8 @@ import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
 import CheckboxStayLoggedIn from "./CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png"
+import {Link} from "react-router-dom";
+import {DarkmodeButton} from "../common/DarkmodeButton.tsx";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState<string>("");
@@ -21,6 +23,7 @@ const RegisterForm = () => {
     <>
       <div className="bg-background-secondary w-128 min-w-64 h-auto flex flex-col justify-center items-center px-8 py-8 rounded-lg shadow">
         <div className="p-6 space-y-4 w-full">
+          <DarkmodeButton/>
           <h1 className="text-3xl font-bold text-text-normal">Register</h1>
           <form className="w-full space-y-4">
             <InputField
@@ -67,7 +70,7 @@ const RegisterForm = () => {
             <div className="flex flex-row justify-between">
               <button
                 type="submit"
-                className="bg-primary text-text-wh focus:ring-4 w-2/5 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4"
+                className="bg-primary text-text-white focus:ring-4 w-2/5 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4"
               >
                 Register
               </button>
@@ -79,7 +82,7 @@ const RegisterForm = () => {
           </form>
           <div className="text-center pt-6 text-text-normal">
             <p>
-              Already have an account? <a href="/login" className="text-primary">Login</a>
+              Already have an account? <Link to="/login" className="text-primary">Login</Link>
             </p>
           </div>
         </div>
