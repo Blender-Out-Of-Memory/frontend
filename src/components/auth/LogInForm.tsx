@@ -22,8 +22,10 @@ const LogInForm = () => {
     <>
       <div className="bg-background-secondary w-128 min-w-64 h-auto flex flex-col justify-center items-center px-8 py-8 rounded-lg shadow">
         <div className="p-6 space-y-4 w-full">
-          <DarkmodeButton/>
-          <h1 className="text-3xl font-bold text-text-normal">Log In</h1>
+          <div className={"flex flex-row justify-between"}>
+            <h1 className="text-3xl font-bold text-text-normal">Log In</h1>
+            <DarkmodeButton/>
+          </div>
           <form className="w-full space-y-4">
             <InputField
                 labelTitle="Name"
