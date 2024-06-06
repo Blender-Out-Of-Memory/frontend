@@ -1,4 +1,6 @@
+import {useState} from "react";
 const DarkmodeButton = () => {
+    const [darkMode, setDarkMode] = useState<boolean>(false);
     return (
         <button className={"text-text-normal"} onClick={() => {
             if (document.documentElement.getAttribute("data-theme") == "dark") {
@@ -6,8 +8,9 @@ const DarkmodeButton = () => {
             } else {
                 document.documentElement.setAttribute("data-theme", "dark");
             }
+            setDarkMode(document.documentElement.getAttribute("data-theme") == "dark");
         }}>
-            {document.documentElement.getAttribute("data-theme") == "dark" ?
+            {!darkMode ?
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                      stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" fill={"currentColor"}
