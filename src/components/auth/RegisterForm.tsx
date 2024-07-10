@@ -2,22 +2,41 @@ import React, { useState, ChangeEvent } from "react";
 import InputField from "../common/InputField";
 import CheckboxStayLoggedIn from "./CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png"
-import {Link} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import DarkmodeButton from "../common/DarkmodeButton.tsx";
+import { useAuth } from "../../contexts/AuthProvider.tsx";
 
-const RegisterForm = () => {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [email, setEmail] = useState<String>("");
+const RegisterForm: React.FC = () => {
+  const { register } = useAuth();
+  const [formData, setFormData] = useState({
+    username: "",
+    first_name: "test",
+    last_name: "test",
+    password: "",
+    password2: "",
+    email: "",
+  });
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (username !== "" && email !== "" && password !== "") {
-      // Registration API Call
+    let { username, first_name, last_name, email, password, password2 } = formData;
+    password2 = password
+
+    if (first_name && username && last_name && email && password && password2) {
+      await register(formData);
     } else {
       alert("Please provide a valid input");
     }
   };
+
 
   return (
     <>
@@ -31,12 +50,10 @@ const RegisterForm = () => {
             <InputField
               labelTitle="Name"
               placeholder="your name here..."
-              name="name"
-              id="name"
-              type="name"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setUsername(e.target.value)
-              }
+              name="username"
+              id="username"
+              type="username"
+              onChange={handleChange}
               customStyling={""}
             ></InputField>
             <InputField
@@ -45,9 +62,7 @@ const RegisterForm = () => {
               name="email"
               id="email"
               type="email"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
+              onChange={handleChange}
               customStyling={""}
             ></InputField>
             <InputField
@@ -56,9 +71,16 @@ const RegisterForm = () => {
               name="password"
               id="password"
               type="password"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
+              onChange={handleChange}
+              customStyling={""}
+            ></InputField>
+            <InputField
+              labelTitle="Repeat Password"
+              placeholder="••••••••"
+              name="password2"
+              id="password2"
+              type="password"
+              onChange={handleChange}
               customStyling={""}
             ></InputField>
             <div className="flex flex-row justify-between">
@@ -73,6 +95,7 @@ const RegisterForm = () => {
               <button
                 type="submit"
                 className="bg-primary text-text-white focus:ring-4 w-2/5 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4"
+                onClick={ handleSubmit }
               >
                 Register
               </button>
