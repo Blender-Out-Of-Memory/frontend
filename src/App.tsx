@@ -1,23 +1,30 @@
-import React from "react"
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
-import RegistrationScreen from "./pages/RegistrationScreen"
-import { redirect } from "react-router-dom";
-import PrivateRoute from "./contexts/ProtectedRoute"
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import RegistrationScreen from "./pages/RegistrationScreen";
+import PrivateRoute from "./contexts/ProtectedRoute";
 import LogInScreen from "./pages/LogInScreen";
 import DashboardPage from "./pages/DashboardPage";
+import AuthProvider from "./contexts/AuthProvider";
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Routes>
-          <Route path="/" element={<Navigate to="/register" />} />
-          <Route path="/register" element={<RegistrationScreen/>} />
-          <Route path="/login" element={<LogInScreen/>} />
-          <Route path="/dashboard" element={<DashboardPage/>} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LogInScreen />} />
+          <Route path="/register" element={<RegistrationScreen />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </Router>
-      
-  )
-}
+  );
+};
 
-export default App
+export default App;
