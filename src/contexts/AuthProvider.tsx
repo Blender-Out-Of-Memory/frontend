@@ -2,32 +2,64 @@ import React, { useContext, createContext, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
-  user: string | null;
+  username: string | null;
   token: string | null;
   login: (data: DataType) => Promise<void>;
   logout: () => void;
+  register: (data: RegisterDataType) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+type RegisterDataType = {
+  username: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  password2: string;
+  email: string;
+};
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 type DataType = {
-  user: string;
+  username: string;
   password: string;
 };
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const [token, setToken] = useState<string>(
-    localStorage.getItem("token") || ""
+    localStorage.getItem("token") || "",
   );
   const navigate = useNavigate();
 
+  const register = async (data: RegisterDataType) => {
+    const endpoint = "http://localhost:8000/account/register/";
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        navigate("/login");
+      } else {
+        const res = await response.json();
+        console.error("Registration failed:", res);
+      }
+    } catch (err) {
+      console.error("Error during registration:", err);
+    }
+  };
+
   const login = async (data: DataType) => {
     try {
-      const response = await fetch("hier könnte ihr API Endpoint stehen", {
+      const endpoint = "http://localhost:8000/account/login/";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,28 +67,41 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         body: JSON.stringify(data),
       });
       const res = await response.json();
-      if (res.data) {
-        setUser(res.data.user);
+      if (res.token) {
+        setUsername(data.username);
         setToken(res.token);
         localStorage.setItem("token", res.token);
         navigate("/dashboard");
-        return;
+      } else {
+        throw new Error(res.message || "Login failed");
       }
-      throw new Error(res.message);
     } catch (err) {
-      console.error(err);
+      console.error("Error during login:", err);
     }
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      const endpoint = "http://localhost:8000/account/logout/";
+      const token = localStorage.getItem("token");
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.error("Error loggin out:", error);
+    }
+    setUsername(null);
     setToken("");
     localStorage.removeItem("token");
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ username, token, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );
@@ -67,7 +112,6 @@ export default AuthProvider;
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    // This error should be handled by error boundaries or alternative means in your component tree.
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
