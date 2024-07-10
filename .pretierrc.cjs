@@ -1,6 +1,6 @@
-module.exports = {
+const config = {
     trailingComma: 'none',
-    tabWidth: 2,
+    tabWidth: 4,
     printWidth: 80,
     useTabs: false,
     semi: false,
@@ -19,5 +19,7 @@ module.exports = {
         },
       },
     ],
-    plugins: [require('prettier-plugin-tailwindcss')],
+    plugins: [import('prettier-plugin-tailwindcss')],
   };
+
+  module.exports = config;
