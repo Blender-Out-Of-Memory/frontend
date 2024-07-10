@@ -4,19 +4,34 @@ import CheckboxStayLoggedIn from "./CheckboxStayLoggedIn.tsx";
 import googleLogo from "../../assets/googlelogo.png";
 import {Link} from "react-router-dom";
 import DarkmodeButton from "../common/DarkmodeButton.tsx";
+import { useAuth } from "../../contexts/AuthProvider.tsx";
 
 const LogInForm = () => {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const { login } = useAuth()
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (username !== "" && password !== "") {
-      // Registration API Call
+    let { username, password } = formData;
+
+    if (username && password ) {
+      await login(formData);
     } else {
       alert("Please provide a valid input");
     }
-  };
+  }
 
   return (
     <>
@@ -30,12 +45,10 @@ const LogInForm = () => {
             <InputField
                 labelTitle="Name"
                 placeholder="your name here..."
-                name="name"
-                id="name"
-                type="name"
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setUsername(e.target.value)
-                }
+                name="username"
+                id="username"
+                type="username"
+                onChange={ handleChange}
                 customStyling={""}
             ></InputField>
             <InputField
@@ -44,9 +57,7 @@ const LogInForm = () => {
                 name="password"
                 id="password"
                 type="password"
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setPassword(e.target.value)
-                }
+                onChange={ handleChange }
                 customStyling={""}
             ></InputField>
             <div className="flex flex-row justify-between">
@@ -60,6 +71,7 @@ const LogInForm = () => {
             <button
                 type="submit"
                 className="bg-primary text-white focus:ring-4 w-full focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-4"
+                onClick={ handleSubmit }
             >
               Log In
             </button>
