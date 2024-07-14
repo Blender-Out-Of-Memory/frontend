@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/AuthProvider";
+
+interface Job {
+  id: number;
+  job: string;
+  started: string;
+  completedAt: string;
+  duration: string;
+  progress: number;
+  status: string;
+  action?: string; // Optional field
+}
+
+interface JobTableProps {
+    jobsActive : number
+}
 
 function TableHeader({ content }: { content: string }) {
     return (
         <th
             scope="col"
+
             className={
                 "px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
             }
@@ -23,61 +40,41 @@ function TableField({ content, last }: { content: string; last?: boolean }) {
     );
 }
 
-const JobTable = () => {
-    const mockJobs = [
-        {
-            id: 1,
-            job: "105020573_cinema_bokeh_v001",
-            started: "2022-01-29 10:20",
-            completedAt: "2022-01-29 10:40",
-            duration: "42s",
-            progress: 100,
-            status: "Completed",
-            action: "View Details",
-        },
-        {
-            id: 2,
-            job: "105020568_ocean_artistic_v013",
-            submitted: "2022-01-29",
-            started: "2022-01-29 11:05",
-            completedAt: "2022-01-29 11:25",
-            duration: "1m 12s",
-            progress: 100,
-            status: "Completed",
-            action: "View Details",
-        },
-        {
-            id: 3,
-            job: "105020560_4k_Atlantic_Dome_Light",
-            started: "2022-01-30 10:32",
-            completedAt: "2022-01-30 11:02",
-            duration: "3s",
-            progress: 100,
-            status: "Completed",
-            action: "View Details",
-        },
-        {
-            id: 4,
-            job: "105020530_MiOps_FeelinBreezish_v02",
-            started: "2022-01-30 12:00",
-            completedAt: "2022-01-30 12:30",
-            duration: "10s",
-            progress: 100,
-            status: "Completed",
-            action: "View Details",
-        },
-        {
-            id: 5,
-            job: "105020527_Houdini_15_SeaWeed_v01",
-            started: "2022-01-30 13:45",
-            completedAt: "2022-01-30 14:15",
-            duration: "15s",
-            progress: 100,
-            status: "Completed",
-            action: "View Details",
-        },
-    ];
-    const [jobs, setJobs] = useState(mockJobs);
+const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
+    const [jobs, setJobs] = useState<Job[]>([]);
+
+    useEffect(() => {
+        fetchData();
+    }, [jobsActive]);
+
+  const { token } = useAuth();
+
+    const fetchData = async () => {
+    try {
+          const endpoint = "http://localhost:8000/api/taskscheduler/render-tasks/";
+          const response = await fetch(endpoint, {
+            method: "GET",
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          });
+          const jsonData = await response.json();
+          console.log(jsonData)
+          const formattedJobs: Job[] = jsonData.map((job: any) => ({
+          id: job.taskID_Int || 0,
+          job: job.job || 'Unknown',
+          started: job.started || 'N/A',
+          completedAt: job.completedAt || 'N/A',
+          duration: job.duration || 'N/A',
+          progress: job.stage || 0,
+          status: job.stage || 'Unknown',
+          action: job.action || 'View Details',
+            }));
+            setJobs(formattedJobs);
+        } catch (error) {
+          console.error("Error loggin out:", error);
+        }
+    }
 
     return (
         <div className="ml-12 mr-12 mt-5 mb-5 max-h-[calc(100vh-140px)] overflow-auto">
