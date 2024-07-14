@@ -1,6 +1,11 @@
 import logowithoutbg from "../../assets/logowihtoutbg.png";
+import { useAuth } from "../../contexts/AuthProvider";
 
 const TopBar = () => {
+    const { logout } = useAuth();
+    const onclick = () => {
+        logout()
+    }
     return (
         <div className="bg-secondary-navy h-20 flex flex-row justify-between items-center">
             <div className="w-20 h-20 ml-12">
@@ -12,7 +17,7 @@ const TopBar = () => {
             <div className="text-text-white font-bold text-2xl">
                 Blasting through bottlenecks
             </div>
-            <div className="mr-12">
+            <div className="mr-12" onClick={onclick}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="#FF7A00"
