@@ -88,6 +88,14 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
         fetchData();
     }, [jobsActive]);
 
+    useEffect(() => {
+    const interval = setInterval(() => {
+      updateJobProgress();
+    }, 5000); // Update every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [jobs]);
+
   const { token } = useAuth();
 
     const fetchData = async () => {
@@ -108,7 +116,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
           completedAt: formattedTime(job.completedAt),
           duration: diff(job.startedAt, job.completedAt)|| 'N/A',
           progress: job.stage || 0,
-          status: job.stage || 'Unknown',
+          status: job.Stage || 'Unknown',
           action: job.action || 'View Details',
             }));
             setJobs(formattedJobs);
@@ -116,6 +124,33 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
           console.error("Error loggin out:", error);
         }
     }
+
+      const updateJobProgress = async () => {
+    try {
+      const updatedJobs = await Promise.all(
+        jobs.map(async (job) => {
+          const response = await fetch(
+            `http://localhost:8000/api/taskscheduler/render-tasks/${job.id}/job-progress/`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Token ${token}`,
+              },
+            }
+          );
+          const jsonData = await response.json();
+          return {
+            ...job,
+            progress: jsonData.totalProgress || job.progress,
+            status: jsonData.Stage || job.status,
+          };
+        })
+      );
+      setJobs(updatedJobs);
+    } catch (error) {
+      console.error("Error updating job progress:", error);
+    }
+  };
 
     return (
         <div className="ml-12 mr-12 mt-5 mb-5 max-h-[calc(100vh-140px)] overflow-auto">
@@ -130,6 +165,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
                         <TableHeader content="progress" />
                         <TableHeader content="status" />
                         <TableHeader content="Download" />
+                        <TableHeader content="Sync" />
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -149,8 +185,8 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
                                 content={job.status}
                                 last={true}
                             ></TableField>
+
                             <th scope="col" className="px-6 py-3">
-                                {" "}
                                 <button>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -168,6 +204,23 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
                                     </svg>
                                 </button>
                             </th>
+                            <th scope="col" className="px-6 py-3">
+                                <button>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        stroke="currentColor"
+                                        strokeWidth={0.5}
+                                        className="size-6"
+                                    >
+                                        <path d="M21.66 10.37a.62.62 0 0 0 .07-.19l.75-4a1 1 0 0 0-2-.36l-.37 2a9.22 9.22 0 0 0-16.58.84 1 1 0 0 0 .55 1.3 1 1 0 0 0 1.31-.55A7.08 7.08 0 0 1 12.07 5a7.17 7.17 0 0 1 6.24 3.58l-1.65-.27a1 1 0 1 0-.32 2l4.25.71h.16a.93.93 0 0 0 .34-.06.33.33 0 0 0 .1-.06.78.78 0 0 0 .2-.11l.08-.1a1.07 1.07 0 0 0 .14-.16.58.58 0 0 0 .05-.16zM19.88 14.07a1 1 0 0 0-1.31.56A7.08 7.08 0 0 1 11.93 19a7.17 7.17 0 0 1-6.24-3.58l1.65.27h.16a1 1 0 0 0 .16-2L3.41 13a.91.91 0 0 0-.33 0H3a1.15 1.15 0 0 0-.32.14 1 1 0 0 0-.18.18l-.09.1a.84.84 0 0 0-.07.19.44.44 0 0 0-.07.17l-.75 4a1 1 0 0 0 .8 1.22h.18a1 1 0 0 0 1-.82l.37-2a9.22 9.22 0 0 0 16.58-.83 1 1 0 0 0-.57-1.28z"></path>
+                                    </svg>
+                                </button>
+                            </th>
+
+                            
+
                         </tr>
                     ))}
                 </tbody>
