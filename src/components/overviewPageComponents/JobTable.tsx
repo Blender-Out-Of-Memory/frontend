@@ -14,6 +14,9 @@ interface Job {
 
 interface JobTableProps {
     jobsActive : number
+    setJobsActive: React.Dispatch<React.SetStateAction<number>>;
+    jobsCompleted : number
+    setJobsCompleted: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function TableHeader({ content }: { content: string }) {
@@ -81,7 +84,7 @@ function diff(fromTimestamp: string | null, toTimestamp: string | null): string 
     return `${minutes} minutes, ${seconds} seconds`;
 }
 
-const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
+const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, jobsCompleted, setJobsCompleted}) => {
     const [jobs, setJobs] = useState<Job[]>([]);
 
     useEffect(() => {
@@ -120,6 +123,17 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
           action: job.action || 'View Details',
             }));
             setJobs(formattedJobs);
+            let activeCount = 0;
+            let completedCount = 0;
+            for (const job of formattedJobs) {
+                if (job.status === "6-FIN" || job.status === "7-EXP") {
+                    completedCount++;
+                } else {
+                    activeCount++;
+                }
+                setJobsCompleted(completedCount);
+                setJobsActive(activeCount);
+            }
         } catch (error) {
           console.error("Error loggin out:", error);
         }
@@ -147,6 +161,18 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
         })
       );
       setJobs(updatedJobs);
+      let activeCount = 0;
+        let completedCount = 0;
+        for (const job of updatedJobs) {
+            if (job.status === "6-FIN" || job.status === "7-EXP") {
+                completedCount++;
+            } else {
+                activeCount++;
+            }
+        }
+        setJobsCompleted(completedCount);
+        setJobsActive(activeCount);
+
     } catch (error) {
       console.error("Error updating job progress:", error);
     }
@@ -230,7 +256,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
                                             fill="none"
                                             viewBox="0 0 24 24"
                                             strokeWidth={1.5}
-                                            stroke="currentColor"
+                                            stroke={job.status !== "6-FIN" ? 'lightgrey' : 'black'}
                                             className="size-6"
                                         >
                                             <path

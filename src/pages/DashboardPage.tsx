@@ -7,6 +7,7 @@ import { useAuth } from "../contexts/AuthProvider";
 const DashboardPage = () => {
     const [open, setOpen] = useState(false);
     const [jobsActive, setJobsActive] = useState<number>(0);
+    const [jobsCompleted, setJobsCompleted] = useState<number>(0);
     const { username } = useAuth();
 
     const handleOpen = () => setOpen(true);
@@ -39,10 +40,10 @@ const DashboardPage = () => {
                         <div className="text-text-white font-bold text-lg">
                             Jobs Completed
                         </div>
-                        <div className="text-white text-lg">0</div>
+                        <div className="text-white text-lg">{jobsCompleted}</div>
                     </div>
                 </div>
-                <JobTable jobsActive={jobsActive}></JobTable>
+                <JobTable jobsActive={jobsActive} setJobsActive={setJobsActive} jobsCompleted={jobsCompleted} setJobsCompleted={setJobsCompleted}></JobTable>
             </div>
         </div>
     );
