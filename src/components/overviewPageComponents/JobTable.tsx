@@ -40,6 +40,47 @@ function TableField({ content, last }: { content: string; last?: boolean }) {
     );
 }
 
+function formattedTime(time: string | null): string {
+    if (!time){
+        return "N/A"
+    }
+    const date = new Date(time);
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: '2-digit',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'UTC'
+    }
+    return new Intl.DateTimeFormat('de-DE', options).format(date);
+}
+
+function diff(fromTimestamp: string | null, toTimestamp: string | null): string {
+    if (!fromTimestamp || !toTimestamp) {
+        return "N/A";
+    }
+    const fromDate = new Date(fromTimestamp);
+    const toDate = new Date(toTimestamp);
+    
+    let difference = toDate.getTime() - fromDate.getTime();
+    
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    difference -= days * 1000 * 60 * 60 * 24;
+    
+    const hours = Math.floor(difference / (1000 * 60 * 60));
+    difference -= hours * 1000 * 60 * 60;
+    
+    const minutes = Math.floor(difference / (1000 * 60));
+    difference -= minutes * 1000 * 60;
+    
+    const seconds = Math.floor(difference / 1000);
+    
+    return `${minutes} minutes, ${seconds} seconds`;
+}
+
 const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
     const [jobs, setJobs] = useState<Job[]>([]);
 
@@ -61,11 +102,11 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
           const jsonData = await response.json();
           console.log(jsonData)
           const formattedJobs: Job[] = jsonData.map((job: any) => ({
-          id: job.taskID_Int || 0,
+          id: job.TaskID_Int,
           job: job.job || 'Unknown',
-          started: job.started || 'N/A',
-          completedAt: job.completedAt || 'N/A',
-          duration: job.duration || 'N/A',
+          started: formattedTime(job.StartedAt),
+          completedAt: formattedTime(job.completedAt),
+          duration: diff(job.startedAt, job.completedAt)|| 'N/A',
           progress: job.stage || 0,
           status: job.stage || 'Unknown',
           action: job.action || 'View Details',
