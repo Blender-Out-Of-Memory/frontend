@@ -152,6 +152,43 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
     }
   };
 
+  const handleDownload = async (fileId : number) => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/taskscheduler/render-tasks/${fileId}/download/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Download failed');
+            }
+
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = 'download'; // default filename
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i);
+                if (filenameMatch) {
+                    filename = filenameMatch[1];
+                }
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename; 
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Download error:', error);
+        }
+    };
+
+
     return (
         <div className="ml-12 mr-12 mt-5 mb-5 max-h-[calc(100vh-140px)] overflow-auto">
             <table className="min-w-full divide-y divide-gray-200 rounded-lg border border-gray-300">
@@ -187,22 +224,22 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive }) => {
                             ></TableField>
 
                             <th scope="col" className="px-6 py-3">
-                                <button>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-6"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                                        />
-                                    </svg>
-                                </button>
+                            <button className="focus:outline-none" onClick={() => handleDownload(job.id)}>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="size-6"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                            />
+                                        </svg>
+                                    </button>
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 <button>
