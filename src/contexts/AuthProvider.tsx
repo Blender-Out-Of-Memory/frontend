@@ -88,7 +88,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Token ${token}`,
         },
       });
     } catch (error) {
