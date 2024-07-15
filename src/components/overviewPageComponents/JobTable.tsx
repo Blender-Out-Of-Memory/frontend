@@ -93,8 +93,8 @@ function diff(fromTimestamp: string | null, toTimestamp: string | null): string 
 
 }
 
-const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, jobsCompleted, setJobsCompleted}) => {
-    const [jobs, setJobs] = useState<Job[]>([]);
+const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsCompleted}) => {
+    const [jobs, setJobs] = useState<Job[]>([])
 
     useEffect(() => {
         fetchData();
