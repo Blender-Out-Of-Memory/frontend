@@ -43,6 +43,14 @@ function TableField({ content, last }: { content: string; last?: boolean }) {
     );
 }
 
+function extractTimeComponents(dateTimeString: string) {
+  const [datePart, timePart] = dateTimeString.split(', ');
+
+  const [hours, minutes, seconds] = timePart.split(':').map(Number);
+
+  return { hours, minutes, seconds };
+}
+
 function formattedTime(time: string | null): string {
     if (!time){
         return "N/A"
@@ -65,23 +73,24 @@ function diff(fromTimestamp: string | null, toTimestamp: string | null): string 
     if (!fromTimestamp || !toTimestamp) {
         return "N/A";
     }
-    const fromDate = new Date(fromTimestamp);
-    const toDate = new Date(toTimestamp);
     
-    let difference = toDate.getTime() - fromDate.getTime();
-    
-    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    difference -= days * 1000 * 60 * 60 * 24;
-    
-    const hours = Math.floor(difference / (1000 * 60 * 60));
-    difference -= hours * 1000 * 60 * 60;
-    
-    const minutes = Math.floor(difference / (1000 * 60));
-    difference -= minutes * 1000 * 60;
-    
-    const seconds = Math.floor(difference / 1000);
-    
-    return `${minutes} minutes, ${seconds} seconds`;
+    const { hours: fromHours, minutes: fromMinutes, seconds: fromSeconds } = extractTimeComponents(fromTimestamp);
+    const { hours: toHours, minutes: toMinutes, seconds: toSeconds } = extractTimeComponents(toTimestamp);
+
+    const fromTotalSeconds = fromHours * 3600 + fromMinutes * 60 + fromSeconds;
+    const toTotalSeconds = toHours * 3600 + toMinutes * 60 + toSeconds;
+
+    let differenceInSeconds = Math.abs(toTotalSeconds - fromTotalSeconds);
+
+    const hours = Math.floor(differenceInSeconds / 3600);
+    differenceInSeconds -= hours * 3600;
+
+    const minutes = Math.floor(differenceInSeconds / 60);
+    differenceInSeconds -= minutes * 60;
+
+    const seconds = differenceInSeconds;
+    return `${minutes}m ${seconds}s`;
+
 }
 
 const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, jobsCompleted, setJobsCompleted}) => {
@@ -116,8 +125,8 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, jobsComp
           id: job.TaskID_Int,
           job: job.job || 'Unknown',
           started: formattedTime(job.StartedAt),
-          completedAt: formattedTime(job.completedAt),
-          duration: diff(job.startedAt, job.completedAt)|| 'N/A',
+          completedAt: formattedTime(job.FinishedAt),
+          duration: diff(job.startedAt, job.FinishedAt)|| 'N/A',
           progress: job.stage || 0,
           status: job.Stage || 'Unknown',
           action: job.action || 'View Details',
@@ -155,6 +164,8 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, jobsComp
           const jsonData = await response.json();
           return {
             ...job,
+            completedAt: formattedTime(jsonData.finishedAt),
+            duration: diff(job.started, formattedTime(jsonData.finishedAt)),
             progress: jsonData.totalProgress || job.progress,
             status: jsonData.Stage || job.status,
           };
