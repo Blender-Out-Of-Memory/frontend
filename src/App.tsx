@@ -19,7 +19,9 @@ const App: React.FC = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<LogInScreen />} />
           <Route path="/register" element={<RegistrationScreen />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </Router>
