@@ -112,7 +112,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsC
 
     const fetchData = async () => {
     try {
-          const endpoint = "http://localhost:8000/api/taskscheduler/render-tasks/";
+          const endpoint = "https://api.boomtechnologies.de/api/taskscheduler/render-tasks/";
           const response = await fetch(endpoint, {
             method: "GET",
             headers: {
@@ -153,7 +153,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsC
       const updatedJobs = await Promise.all(
         jobs.map(async (job) => {
           const response = await fetch(
-            `http://localhost:8000/api/taskscheduler/render-tasks/${job.id}/job-progress/`,
+            `https://api.boomtechnologies.de/api/taskscheduler/render-tasks/${job.id}/job-progress/`,
             {
               method: "GET",
               headers: {
@@ -191,7 +191,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsC
 
   const handleDownload = async (fileId : number) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/taskscheduler/render-tasks/${fileId}/download/`, {
+            const response = await fetch(`https://api.boomtechnologies.de/api/taskscheduler/render-tasks/${fileId}/download/`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Token ${token}`,
