@@ -70,7 +70,7 @@ function formattedTime(time: string | null): string {
 }
 
 function diff(fromTimestamp: string | null, toTimestamp: string | null): string {
-    if (!fromTimestamp || !toTimestamp) {
+    if (!fromTimestamp || !toTimestamp || toTimestamp == "N/A") {
         return "N/A";
     }
     
