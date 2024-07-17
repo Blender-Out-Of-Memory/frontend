@@ -12,10 +12,16 @@ const DashboardPage = () => {
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    if(localStorage.getItem("data-theme") != null){
+        document.documentElement.setAttribute("data-theme", localStorage.getItem("data-theme") as string);
+    }
+
+    console.log(document.documentElement.getAttribute("data-theme"));
     return (
         <div className="flex flex-col h-screen">
             <TopBar></TopBar>
-            <div className="bg-bg-primary overflow-hidden flex-grow">
+            <div className="bg-background-secondary overflow-hidden flex-grow">
                 <div className="flex flex-row ml-12 mr-12 mt-8 gap-8">
                     <div className="flex flex-row items-center bg-secondary-navy w-2/4 h-20 rounded-md justify-between">
                         <div className="text-2xl text-white indent-10">

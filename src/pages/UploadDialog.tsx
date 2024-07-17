@@ -47,6 +47,10 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ open, onClose, setJobsActiv
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, maxFiles: 1});
 
+    if(localStorage.getItem("data-theme") != null){
+        document.documentElement.setAttribute("data-theme", localStorage.getItem("data-theme") as string);
+    }
+
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Upload Files</DialogTitle>
