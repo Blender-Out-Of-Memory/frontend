@@ -22,7 +22,7 @@ const UploadDialog: React.FC<UploadDialogProps> = ({ open, onClose, setJobsActiv
     const handleUpload = () => {
         const file = files[0]
 
-        const endpoint = "http://localhost:8000/api/taskscheduler/render-tasks/run_task/"
+        const endpoint = "https://api.boomtechnologies.de/api/taskscheduler/render-tasks/run_task/"
         fetch(endpoint, {
             method:'POST',
             body: file,
