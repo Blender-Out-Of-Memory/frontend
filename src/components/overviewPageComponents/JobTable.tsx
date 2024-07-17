@@ -44,18 +44,30 @@ function TableField({ content, last }: { content: string; last?: boolean }) {
 }
 
 function extractTimeComponents(dateTimeString: string) {
-  const [datePart, timePart] = dateTimeString.split(', ');
+    if (!dateTimeString) {
+        console.error("Invalid dateTimeString:", dateTimeString);
+        return { hours: 0, minutes: 0, seconds: 0 };
+    }
 
-  const [hours, minutes, seconds] = timePart.split(':').map(Number);
+    const [datePart, timePart] = dateTimeString.split(', ');
+    if (!timePart) {
+        console.error("Invalid timePart in dateTimeString:", dateTimeString);
+        return { hours: 0, minutes: 0, seconds: 0 };
+    }
 
-  return { hours, minutes, seconds };
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+    return { hours, minutes, seconds };
 }
 
-function formattedTime(time: string | null): string {
-    if (!time){
-        return "N/A"
+function formattedTime(time: string | null): string {
+    if (!time) {
+        return "N/A";
     }
     const date = new Date(time);
+    if (isNaN(date.getTime())) {
+        console.error("Invalid date format:", time);
+        return "N/A";
+    }
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: '2-digit',
@@ -65,12 +77,14 @@ function formattedTime(time: string | null): string {
         second: '2-digit',
         hour12: false,
         timeZone: 'UTC'
-    }
+    };
     return new Intl.DateTimeFormat('de-DE', options).format(date);
 }
 
 function diff(fromTimestamp: string | null, toTimestamp: string | null): string {
-    if (!fromTimestamp || !toTimestamp || toTimestamp == "N/A") {
+    function diff(fromTimestamp: string | null, toTimestamp: string | null): string {
+    if (!fromTimestamp || !toTimestamp || toTimestamp === "N/A") {
+        console.error("Invalid timestamps for diff calculation:", fromTimestamp, toTimestamp);
         return "N/A";
     }
     
@@ -112,67 +126,68 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsC
 
     const fetchData = async () => {
     try {
-          const endpoint = "https://api.boomtechnologies.de/api/taskscheduler/render-tasks/";
-          const response = await fetch(endpoint, {
+        const endpoint = "https://api.boomtechnologies.de/api/taskscheduler/render-tasks/";
+        const response = await fetch(endpoint, {
             method: "GET",
             headers: {
-              Authorization: `Token ${token}`,
-            },
-          });
-          const jsonData = await response.json();
-          console.log(jsonData)
-          const formattedJobs: Job[] = jsonData.map((job: any) => ({
-          id: job.TaskID_Int,
-          job: job.job || 'Unknown',
-          started: formattedTime(job.StartedAt),
-          completedAt: formattedTime(job.FinishedAt),
-          duration: diff(job.startedAt, job.FinishedAt)|| 'N/A',
-          progress: job.stage || 0,
-          status: job.Stage || 'Unknown',
-          action: job.action || 'View Details',
-            }));
-            setJobs(formattedJobs);
-            let activeCount = 0;
-            let completedCount = 0;
-            for (const job of formattedJobs) {
-                if (job.status === "6-FIN" || job.status === "7-EXP") {
-                    completedCount++;
-                } else {
-                    activeCount++;
-                }
-                setJobsCompleted(completedCount);
-                setJobsActive(activeCount);
-            }
-        } catch (error) {
-          console.error("Error loggin out:", error);
-        }
-    }
-
-      const updateJobProgress = async () => {
-    try {
-      const updatedJobs = await Promise.all(
-        jobs.map(async (job) => {
-          const response = await fetch(
-            `https://api.boomtechnologies.de/api/taskscheduler/render-tasks/${job.id}/job-progress/`,
-            {
-              method: "GET",
-              headers: {
                 Authorization: `Token ${token}`,
-              },
+            },
+        });
+        const jsonData = await response.json();
+        console.log("Fetched data:", jsonData);
+        const formattedJobs: Job[] = jsonData.map((job: any) => ({
+            id: job.TaskID_Int,
+            job: job.job || 'Unknown',
+            started: formattedTime(job.StartedAt),
+            completedAt: formattedTime(job.FinishedAt),
+            duration: diff(formattedTime(job.StartedAt), formattedTime(job.FinishedAt)) || 'N/A',
+            progress: job.stage || 0,
+            status: job.Stage || 'Unknown',
+            action: job.action || 'View Details',
+        }));
+        setJobs(formattedJobs);
+        let activeCount = 0;
+        let completedCount = 0;
+        for (const job of formattedJobs) {
+            if (job.status === "6-FIN" || job.status === "7-EXP") {
+                completedCount++;
+            } else {
+                activeCount++;
             }
-          );
-          const jsonData = await response.json();
-          return {
-            ...job,
-            completedAt: formattedTime(jsonData.finishedAt),
-            duration: diff(job.started, formattedTime(jsonData.finishedAt)),
-            progress: jsonData.totalProgress || job.progress,
-            status: jsonData.Stage || job.status,
-          };
-        })
-      );
-      setJobs(updatedJobs);
-      let activeCount = 0;
+        }
+        setJobsCompleted(completedCount);
+        setJobsActive(activeCount);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+};
+
+
+ const updateJobProgress = async () => {
+    try {
+        const updatedJobs = await Promise.all(
+            jobs.map(async (job) => {
+                const response = await fetch(
+                    `https://api.boomtechnologies.de/api/taskscheduler/render-tasks/${job.id}/job-progress/`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+                const jsonData = await response.json();
+                return {
+                    ...job,
+                    completedAt: formattedTime(jsonData.finishedAt),
+                    duration: diff(job.started, formattedTime(jsonData.finishedAt)),
+                    progress: jsonData.totalProgress || job.progress,
+                    status: jsonData.Stage || job.status,
+                };
+            })
+        );
+        setJobs(updatedJobs);
+        let activeCount = 0;
         let completedCount = 0;
         for (const job of updatedJobs) {
             if (job.status === "6-FIN" || job.status === "7-EXP") {
@@ -183,11 +198,11 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsC
         }
         setJobsCompleted(completedCount);
         setJobsActive(activeCount);
-
     } catch (error) {
-      console.error("Error updating job progress:", error);
+        console.error("Error updating job progress:", error);
     }
-  };
+};
+
 
   const handleDownload = async (fileId : number) => {
         try {
