@@ -36,7 +36,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
 
   const register = async (data: RegisterDataType) => {
-    const endpoint = "http://localhost:8000/account/register/";
+    const endpoint = "https://api.boomtechnologies.de/account/register/";
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -58,7 +58,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (data: DataType) => {
     try {
-      const endpoint = "http://localhost:8000/account/login/";
+      const endpoint = "https://api.boomtechnologies.de/account/login/";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -82,7 +82,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      const endpoint = "http://localhost:8000/account/logout/";
+      const endpoint = "https://api.boomtechnologies.de/account/logout/";
       const token = localStorage.getItem("token");
       const response = await fetch(endpoint, {
         method: "POST",
