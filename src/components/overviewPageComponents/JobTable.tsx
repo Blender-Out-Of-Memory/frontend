@@ -94,7 +94,62 @@ function diff(fromTimestamp: string | null, toTimestamp: string | null): string 
 }
 
 const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsCompleted}) => {
-    const [jobs, setJobs] = useState<Job[]>([])
+    const mockJobs = [
+        {
+            id: 1,
+            job: "105020573_cinema_bokeh_v001",
+            started: "2022-01-29 10:20",
+            completedAt: "2022-01-29 10:40",
+            duration: "42s",
+            progress: 100,
+            status: "Completed",
+            action: "View Details",
+        },
+        {
+            id: 2,
+            job: "105020568_ocean_artistic_v013",
+            submitted: "2022-01-29",
+            started: "2022-01-29 11:05",
+            completedAt: "2022-01-29 11:25",
+            duration: "1m 12s",
+            progress: 100,
+            status: "Completed",
+            action: "View Details",
+        },
+        {
+            id: 3,
+            job: "105020560_4k_Atlantic_Dome_Light",
+            started: "2022-01-30 10:32",
+            completedAt: "2022-01-30 11:02",
+            duration: "3s",
+            progress: 100,
+            status: "Completed",
+            action: "View Details",
+        },
+        {
+            id: 4,
+            job: "105020530_MiOps_FeelinBreezish_v02",
+            started: "2022-01-30 12:00",
+            completedAt: "2022-01-30 12:30",
+            duration: "10s",
+            progress: 100,
+            status: "Completed",
+            action: "View Details",
+        },
+        {
+            id: 5,
+            job: "105020527_Houdini_15_SeaWeed_v01",
+            started: "2022-01-30 13:45",
+            completedAt: "2022-01-30 14:15",
+            duration: "15s",
+            progress: 100,
+            status: "Completed",
+            action: "View Details",
+        },
+    ];
+    const [jobs, setJobs] = useState(mockJobs);
+
+    //const [jobs, setJobs] = useState<Job[]>([])
 
     useEffect(() => {
         fetchData();
@@ -242,7 +297,7 @@ const JobTable: React.FC<JobTableProps> = ({ jobsActive, setJobsActive, setJobsC
                         <TableHeader content="Sync" />
                     </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-background-secondary divide-y divide-gray-200 text-text-normal">
                     {jobs.map((job) => (
                         <tr key={job.id}>
                             <TableField

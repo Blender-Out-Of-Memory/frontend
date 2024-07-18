@@ -18,10 +18,10 @@ const TopBar = () => {
             <div className="text-text-white font-bold text-2xl">
                 Blasting through bottlenecks
             </div>
-            <div>
-                <DarkmodeButton/>
-            </div>
-            <div className="mr-12">
+            <div className="mr-12 flex flex-row content-center items-center">
+                <div className="mt-8 mr-8">
+                    <DarkmodeButton/>
+                </div>
                 <div onClick={onclick}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

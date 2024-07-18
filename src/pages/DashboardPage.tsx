@@ -21,7 +21,7 @@ const DashboardPage = () => {
     return (
         <div className="flex flex-col h-screen">
             <TopBar></TopBar>
-            <div className="bg-background-secondary overflow-hidden flex-grow">
+            <div className="bg-background-primary overflow-hidden flex-grow">
                 <div className="flex flex-row ml-12 mr-12 mt-8 gap-8">
                     <div className="flex flex-row items-center bg-secondary-navy w-2/4 h-20 rounded-md justify-between">
                         <div className="text-2xl text-white indent-10">
