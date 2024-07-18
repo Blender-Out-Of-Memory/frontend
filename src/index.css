@@ -37,7 +37,7 @@
 
     :root[data-theme="dark"] {
         --color-primary: #FF7A00 /**#EA580C maybe als dunklere farbe ig??**/; /* Keep the primary color consistent */
-        --color-secondary-navy: #000d1a; /* Lighter navy for better contrast */
+        --color-secondary-navy: #001527; /* Lighter navy for better contrast */
         --color-secondary-cream: #3E3E3E; /* Dark cream color */
         --color-secondary-teal: #1E7B7B; /* Darker teal */
 
